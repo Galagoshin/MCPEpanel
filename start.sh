@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.0.0'
+	VERSION='1.2.0'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -133,6 +133,9 @@
 		if [ -d "vendor" ]; then
 			rm -rf vendor
 		fi
+		if [ -d "logs" ]; then
+			rm -rf logs
+		fi
 		if [ -d "worlds" ]; then
 			rm -rf worlds
 		fi
@@ -184,6 +187,9 @@
 		if [ -d "crashdumps" ]; then
 			rm -rf crashdumps
 		fi
+		if [ -d "plugin_data" ]; then
+			rm -rf plugin_data
+		fi
 		if [ -f "nukkit.yml" ]; then
 			rm -rf genisys.yml
 		fi
@@ -199,62 +205,66 @@
 		if [ -f "creativeitems.json" ]; then
 			rm -rf creativeitems.json
 		fi
+		if [ -f "pocketmine-soft.yml" ]; then
+			rm -rf pocketmine-soft.yml
+		fi
+		if [ -f "installer.sh" ]; then
+			rm -rf installer.sh
+		fi
+		if [ -f "LICENSE" ]; then
+			rm -rf LICENSE
+		fi
+		if [ -f "README.md" ]; then
+			rm -rf README.md
+		fi
 		apt-get install git
 		apt-get install screen
 	}
 
+	#Yes, I tried, but nothing happened
 	function MINET(){
 		echo -en "${IBlue}Установка ядра ${IGreen}MiNET${White}\n"
 		git clone https://github.com/NiclasOlofsson/MiNET.git
 		mv MiNET/* $DIR
 		rm -rf MiNET
 		echo -en "${IBlue}Установка пакетов${White}\n"
-		apt-get install msitools
-		apt-get install nuget
+		apt install mono-xbuild
+		apt install mono
 		apt install mono-runtime
 		echo -en "${IBlue}Компиляция ядра${White}\n"
-		msbuild src/MiNET/MiNET.sln /p:Configuration=Linux
-		nuget restore src/MiNET/MiNET.sln
+		xbuild src/MiNET/MiNET.sln
 		cd src/MiNET/MiNET.Service/bin/Linux
 		mono MiNET.Service.exe
 	}
 
-	function NUKKIT(){
-		echo -en "${IBlue}Установка ядра ${IGreen}Nukkit${White}\n"
-		wget http://ci.mengcraft.com:8080/job/Nukkit/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
+	function NUKKITX(){
+		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.8)${White}\n"
+		wget https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
 		mv nukkit-1.0-SNAPSHOT.jar nukkit.jar
-		echo -en "${IBlue}Установка библеотек ${IGreen}Java 8${White}\n"
-		URL=https://cloud.mail.ru/public/DkS3/MD65V48Qt
-		FILENAME=java.tar.gz
-		URLPART0=$(wget --quiet -O - $URL | grep -o '"weblink_get":\[[^]]\+\]' | sed 's/.*"url":"\([^"]\+\)".*/\1/')
-		URLPART1=$(echo $URL | awk -F '/public/' '{print $2}')
-		URLPART2=$(wget --quiet -O - "https://cloud.mail.ru/api/v2/tokens/download" | sed 's/.*"token":"\([^"]\+\)".*/\1/')
-		wget --no-check-certificate --referer=$URL "$URLPART0/$URLPART1/$FILENAME?key=$URLPART2" -O $FILENAME
-		tar -xvf java.tar.gz
-		rm -rf java.tar.gz
-		mv jre1.8.0_161 bin
+		echo -en "${IBlue}Установка библеотек ${IGreen}Java 10${White}\n"
+		if [ -n "dpkg -l | grep java" ]
+		then
+   			true
+		else
+   			add-apt-repository ppa:linuxuprising/java
+			apt-get update
+			apt-get install oracle-java10-installer
+		fi
 		INSTALL_FINISH
 	}
-	
-	function ALTAY(){
-		echo -en "${IBlue}Установка ядра ${IGreen}Altay${White}\n"
-		wget http://turanic.io:8181/job/Altay/48/artifact/plugins/Altay/Altay_1.2_3.0.1.phar
-		mv Altay_1.2_3.0.1.phar PocketMine-MP.phar
-		rm -rf Altay_1.2_3.0.1.phar
-		echo -en "${IBlue}Установка библеотек ${IGreen}PHP 7.2${White}\n"
-		wget https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
-		tar -xvf PHP_Linux-x86_64.tar.gz
-		rm -rf PHP_Linux-x86_64.tar.gz
-		echo -en "${IBlue}Установка ${IGreen}vendor${White}\n"
-		URL=https://cloud.mail.ru/public/Ezan/N68B1q6ud
-		FILENAME=vendor.tar
-		URLPART0=$(wget --quiet -O - $URL | grep -o '"weblink_get":\[[^]]\+\]' | sed 's/.*"url":"\([^"]\+\)".*/\1/')
-		URLPART1=$(echo $URL | awk -F '/public/' '{print $2}')
-		URLPART2=$(wget --quiet -O - "https://cloud.mail.ru/api/v2/tokens/download" | sed 's/.*"token":"\([^"]\+\)".*/\1/')
-		wget --no-check-certificate --referer=$URL "$URLPART0/$URLPART1/$FILENAME?key=$URLPART2" -O $FILENAME
-		tar -xvf vendor.tar
-		rm -rf vendor.tar
-		rm -rf java.tar.gz
+
+	function NUKKIT(){
+		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.1)${White}\n"
+		wget https://magmacraft.ru/nukkit.jar
+		echo -en "${IGreen}Java 10 ${IBlue}уже установлена!${White}\n"
+		if [ -n "dpkg -l | grep java" ]
+		then
+   			echo -en "${IBlue}Установка библеотек ${IGreen}Java 10${White}\n"
+		else
+   			add-apt-repository ppa:linuxuprising/java
+			apt-get update
+			apt-get install oracle-java10-installer
+		fi
 		INSTALL_FINISH
 	}
 
@@ -272,21 +282,23 @@
 
 	function POCKETMINE(){
 		echo -en "${IBlue}Установка ядра ${IGreen}PocketMine-MP${White}\n"
-		wget https://github.com/pmmp/PocketMine-MP/releases/download/1.7dev-743/PocketMine-MP.phar
+		wget https://jenkins.pmmp.io/job/PocketMine-MP/lastSuccessfulBuild/artifact/PocketMine-MP.phar
 		echo -en "${IBlue}Установка библеотек ${IGreen}PHP 7.2${White}\n"
-		wget https://jenkins.pmmp.io/job/PHP-7.2-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
-		tar -xvf PHP_Linux-x86_64.tar.gz
-		rm -rf PHP_Linux-x86_64.tar.gz
-		echo -en "${IBlue}Установка ${IGreen}vendor${White}\n"
-		URL=https://cloud.mail.ru/public/Ezan/N68B1q6ud
-		FILENAME=vendor.tar
-		URLPART0=$(wget --quiet -O - $URL | grep -o '"weblink_get":\[[^]]\+\]' | sed 's/.*"url":"\([^"]\+\)".*/\1/')
-		URLPART1=$(echo $URL | awk -F '/public/' '{print $2}')
-		URLPART2=$(wget --quiet -O - "https://cloud.mail.ru/api/v2/tokens/download" | sed 's/.*"token":"\([^"]\+\)".*/\1/')
-		wget --no-check-certificate --referer=$URL "$URLPART0/$URLPART1/$FILENAME?key=$URLPART2" -O $FILENAME
-		tar -xvf vendor.tar
-		rm -rf vendor.tar
-		rm -rf java.tar.gz
+		wget https://jenkins.pmmp.io/job/PHP-7.2-Aggregate/lastSuccessfulBuild/artifact/PHP-7.2-Linux-x86_64.tar.gz
+		tar -xvf PHP-7.2-Linux-x86_64.tar.gz
+		rm -rf PHP-7.2-Linux-x86_64.tar.gz
+		INSTALL_FINISH
+	}
+
+	function STEADFAST2(){
+		echo -en "${IBlue}Установка ядра ${IGreen}SteadFast2${White}\n"
+		git clone https://github.com/Hydreon/Steadfast2.git
+		mv Steadfast2/* $DIR
+		rm -rf Steadfast2
+		echo -en "${IBlue}Установка библеотек ${IGreen}PHP 7.2${White}\n"
+		wget https://jenkins.pmmp.io/job/PHP-7.2-Aggregate/lastSuccessfulBuild/artifact/PHP-7.2-Linux-x86_64.tar.gz
+		tar -xvf PHP-7.2-Linux-x86_64.tar.gz
+		rm -rf PHP-7.2-Linux-x86_64.tar.gz
 		INSTALL_FINISH
 	}
 
@@ -296,7 +308,10 @@
 			"1" ) PREPAIR_INSTALL && POCKETMINE;;
 			"2" ) PREPAIR_INSTALL && GENISYSPRO;;
 			"3" ) PREPAIR_INSTALL && NUKKIT;;
-			"4" ) PREPAIR_INSTALL && ALTAY;;
+			"4" ) PREPAIR_INSTALL && NUKKITX;;
+			"5" ) PREPAIR_INSTALL && STEADFAST2;;
+			"6" ) PREPAIR_INSTALL && GOMINT;;
+			"7" ) PREPAIR_INSTALL && MINET;;
 			*) NOT && CORE_SELECT;;
 		esac
 	}
@@ -304,11 +319,15 @@
 	function CORE_CHOOSE(){
 		echo -en "\n${BIBlue}Выбор ядра\n\n"
 		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
-		echo -en "1. PocketMine-MP\n"
-		echo -en "2. GenisysPro\n"
-		echo -en "3. Nukkit\n"
-		echo -en "4. Altay\n"
-		#echo -en "4. MiNET\n"
+		echo -en "1. PocketMine-MP (1.8)\n"
+		echo -en "2. GenisysPro (1.1)\n"
+		echo -en "3. NukkitX (1.1)\n"
+		echo -en "4. NukkitX (1.8)\n"
+		echo -en "5. SteadFast2 (1.1 - 1.8)\n"
+		#Will be added in version 1.3.0
+		#echo -en "6. GoMint (1.8)\n"
+		#Will be added in version 1.5.0
+		#echo -en "7. MiNET (1.8)\n"
 		echo -en "> "
 		CORE_SELECT
 	}
@@ -379,9 +398,13 @@
 					CHECKING_INSTALL
 				fi
 			fi
-		elif [ -f "bin/bin/java" ]; then
+		elif [ -n "dpkg -l | grep java" ]; then
 			if [ -f "nukkit.jar" ]; then
-				bin/bin/java -jar nukkit.jar
+				echo -en "\n${BIBlue}Включение сервера\n\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "> "
+				read G
+				java -jar -Xmx${G}G nukkit.jar
 				echo -en "${IYellow}Сервер был выключен.\n"
 				MAIN_MENU
 			else
@@ -443,11 +466,16 @@
 					CHECKING_INSTALL
 				fi
 			fi
-		elif [ -f "bin/bin/java" ]; then
+		elif [ -n "dpkg -l | grep java" ]; then
 			if [ -f "nukkit.jar" ]; then
+				echo -en "\n${BIBlue}Включение сервера\n\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "> "
+				read G
 				while true
 				do
-					bin/bin/java -jar nukkit.jar
+					trap START_SERVER_MENU 2
+					java -jar -Xmx${G}G nukkit.jar
 					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
 					sleep 5
 				done
@@ -518,6 +546,9 @@
 		if [ -d "vendor" ]; then
 			rm -rf vendor
 		fi
+		if [ -d "logs" ]; then
+			rm -rf logs
+		fi
 		if [ -d "worlds" ]; then
 			rm -rf worlds
 		fi
@@ -583,6 +614,21 @@
 		fi
 		if [ -f "creativeitems.json" ]; then
 			rm -rf creativeitems.json
+		fi
+		if [ -d "plugin_data" ]; then
+			rm -rf plugin_data
+		fi
+		if [ -f "pocketmine-soft.yml" ]; then
+			rm -rf pocketmine-soft.yml
+		fi
+		if [ -f "installer.sh" ]; then
+			rm -rf installer.sh
+		fi
+		if [ -f "LICENSE" ]; then
+			rm -rf LICENSE
+		fi
+		if [ -f "README.md" ]; then
+			rm -rf README.md
 		fi
 		echo -en "\n${IGreen}Сервер успешно удалён!${White}\n"
 		MAIN_MENU
@@ -726,6 +772,14 @@
 			true
 		else
 			mkdir /root/.panel_backups
+			if [ -d "/root/.panel_backups" ]; then
+				true
+			else
+				echo -en "\n${BIBlue}Резервные копии\n\n"
+				echo -en "${BIRed}Создание резервных копий невозможно!\n"
+				echo -en "${Red}Необходимо иметь права суперпользователя!\n"
+				MAIN_MENU
+			fi
 		fi
 		BACKUPS_CHECK
 	}
