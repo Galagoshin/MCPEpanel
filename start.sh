@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.2.0'
+	VERSION='1.3.0'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -241,14 +241,12 @@
 		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.8)${White}\n"
 		wget https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
 		mv nukkit-1.0-SNAPSHOT.jar nukkit.jar
-		echo -en "${IBlue}Установка библеотек ${IGreen}Java 10${White}\n"
 		if [ -n "dpkg -l | grep java" ]
 		then
-   			true
+			echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
 		else
-   			add-apt-repository ppa:linuxuprising/java
-			apt-get update
-			apt-get install oracle-java10-installer
+			echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
+   			apt install openjdk-11-jre-headless
 		fi
 		INSTALL_FINISH
 	}
@@ -256,14 +254,12 @@
 	function NUKKIT(){
 		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.1)${White}\n"
 		wget https://magmacraft.ru/nukkit.jar
-		echo -en "${IGreen}Java 10 ${IBlue}уже установлена!${White}\n"
 		if [ -n "dpkg -l | grep java" ]
 		then
-   			echo -en "${IBlue}Установка библеотек ${IGreen}Java 10${White}\n"
+			echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
 		else
-   			add-apt-repository ppa:linuxuprising/java
-			apt-get update
-			apt-get install oracle-java10-installer
+			echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
+   			apt install openjdk-11-jre-headless
 		fi
 		INSTALL_FINISH
 	}
@@ -311,7 +307,6 @@
 			"4" ) PREPAIR_INSTALL && NUKKITX;;
 			"5" ) PREPAIR_INSTALL && STEADFAST2;;
 			"6" ) PREPAIR_INSTALL && GOMINT;;
-			"7" ) PREPAIR_INSTALL && MINET;;
 			*) NOT && CORE_SELECT;;
 		esac
 	}
@@ -319,15 +314,15 @@
 	function CORE_CHOOSE(){
 		echo -en "\n${BIBlue}Выбор ядра\n\n"
 		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
-		echo -en "1. PocketMine-MP (1.8)\n"
-		echo -en "2. GenisysPro (1.1)\n"
-		echo -en "3. NukkitX (1.1)\n"
-		echo -en "4. NukkitX (1.8)\n"
-		echo -en "5. SteadFast2 (1.1 - 1.8)\n"
-		#Will be added in version 1.3.0
-		#echo -en "6. GoMint (1.8)\n"
-		#Will be added in version 1.5.0
-		#echo -en "7. MiNET (1.8)\n"
+		echo -en "1. PocketMine-MP (PHP, MCPE 1.8)\n"
+		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
+		echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
+		echo -en "4. NukkitX (JAVA, MCPE 1.8)\n"
+		echo -en "5. SteadFast2 (PHP, MCPE 1.1 - 1.8)\n"
+		#Will be released in version 1.3.0
+		#echo -en "6. GoMint (JAVA, MCPE 1.8)\n"
+		#Will be released in version 1.5.0
+		#echo -en "7. MiNET (C#,1.8)\n"
 		echo -en "> "
 		CORE_SELECT
 	}
