@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.3.0'
+	VERSION='1.3.1'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -217,6 +217,15 @@
 		if [ -f "README.md" ]; then
 			rm -rf README.md
 		fi
+		if [ -f "gomint.jar" ]; then
+			rm -rf gomint.jar
+		fi
+		if [ -f "server.yml" ]; then
+			rm -rf server.yml
+		fi
+		if [ -d "world" ]; then
+			rm -rf world
+		fi
 		apt-get install git
 		apt-get install screen
 	}
@@ -235,6 +244,20 @@
 		xbuild src/MiNET/MiNET.sln
 		cd src/MiNET/MiNET.Service/bin/Linux
 		mono MiNET.Service.exe
+	}
+
+	function GOMINT(){
+		echo -en "${IBlue}Установка ядра ${IGreen}GoMint (1.8)${White}\n"
+		wget http://ci.gomint.io/job/GoMint/job/master/lastSuccessfulBuild/artifact/gomint-server/target/GoMint.jar
+		mv GoMint.jar gomint.jar
+		if [ -n "dpkg -l | grep java" ]
+		then
+			echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
+		else
+			echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
+   			apt install openjdk-11-jre-headless
+		fi
+		INSTALL_FINISH
 	}
 
 	function NUKKITX(){
@@ -319,8 +342,7 @@
 		echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
 		echo -en "4. NukkitX (JAVA, MCPE 1.8)\n"
 		echo -en "5. SteadFast2 (PHP, MCPE 1.1 - 1.8)\n"
-		#Will be released in version 1.3.0
-		#echo -en "6. GoMint (JAVA, MCPE 1.8)\n"
+		echo -en "6. GoMint (JAVA, MCPE 1.8)\n"
 		#Will be released in version 1.5.0
 		#echo -en "7. MiNET (C#,1.8)\n"
 		echo -en "> "
@@ -402,6 +424,14 @@
 				java -jar -Xmx${G}G nukkit.jar
 				echo -en "${IYellow}Сервер был выключен.\n"
 				MAIN_MENU
+			elif [ -f "gomint.jar" ]; then
+				echo -en "\n${BIBlue}Включение сервера\n\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "> "
+				read G
+				java -jar -Xmx${G}G gomint.jar
+				echo -en "${IYellow}Сервер был выключен.\n"
+				MAIN_MENU
 			else
 				echo -en "\n${BIRed}Не найдено работающее ядро JAVA!\n"
 				echo -en "${BIRed}Запуск сервера невозможен!\n"
@@ -471,6 +501,18 @@
 				do
 					trap START_SERVER_MENU 2
 					java -jar -Xmx${G}G nukkit.jar
+					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
+					sleep 5
+				done
+			elif [ -f "gomint.jar" ]; then
+				echo -en "\n${BIBlue}Включение сервера\n\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "> "
+				read G
+				while true
+				do
+					trap START_SERVER_MENU 2
+					java -jar -Xmx${G}G gomint.jar
 					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
 					sleep 5
 				done
@@ -624,6 +666,15 @@
 		fi
 		if [ -f "README.md" ]; then
 			rm -rf README.md
+		fi
+		if [ -f "gomint.jar" ]; then
+			rm -rf gomint.jar
+		fi
+		if [ -f "server.yml" ]; then
+			rm -rf server.yml
+		fi
+		if [ -d "world" ]; then
+			rm -rf world
 		fi
 		echo -en "\n${IGreen}Сервер успешно удалён!${White}\n"
 		MAIN_MENU
