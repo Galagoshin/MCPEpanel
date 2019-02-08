@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.3.1'
+	VERSION='1.3.2'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -310,6 +310,8 @@
 	}
 
 	function STEADFAST2(){
+		echo -en "${BRed}Предупреждение! Из-за своеобразного кода этого ядра в панеле могут возникать баги! Скоро эта проблема будет пофикшена\n"
+		sleep 5
 		echo -en "${IBlue}Установка ядра ${IGreen}SteadFast2${White}\n"
 		git clone https://github.com/Hydreon/Steadfast2.git
 		mv Steadfast2/* $DIR
@@ -326,10 +328,9 @@
 		case ${A} in
 			"1" ) PREPAIR_INSTALL && POCKETMINE;;
 			"2" ) PREPAIR_INSTALL && GENISYSPRO;;
-			"3" ) PREPAIR_INSTALL && NUKKIT;;
-			"4" ) PREPAIR_INSTALL && NUKKITX;;
-			"5" ) PREPAIR_INSTALL && STEADFAST2;;
-			"6" ) PREPAIR_INSTALL && GOMINT;;
+			"3" ) PREPAIR_INSTALL && NUKKITX;;
+			"4" ) PREPAIR_INSTALL && STEADFAST2;;
+			"5" ) PREPAIR_INSTALL && GOMINT;;
 			*) NOT && CORE_SELECT;;
 		esac
 	}
@@ -337,12 +338,12 @@
 	function CORE_CHOOSE(){
 		echo -en "\n${BIBlue}Выбор ядра\n\n"
 		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
-		echo -en "1. PocketMine-MP (PHP, MCPE 1.8)\n"
+		echo -en "1. PocketMine-MP (PHP, MCPE 1.9)\n"
 		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
-		echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
-		echo -en "4. NukkitX (JAVA, MCPE 1.8)\n"
-		echo -en "5. SteadFast2 (PHP, MCPE 1.1 - 1.8)\n"
-		echo -en "6. GoMint (JAVA, MCPE 1.8)\n"
+		#echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
+		echo -en "3. NukkitX (JAVA, MCPE 1.9)\n"
+		echo -en "${BRed}4. SteadFast2 (PHP, MCPE 1.1 - 1.9)\n${White}"
+		echo -en "5. GoMint (JAVA, MCPE 1.9)\n"
 		#Will be released in version 1.5.0
 		#echo -en "7. MiNET (C#,1.8)\n"
 		echo -en "> "
