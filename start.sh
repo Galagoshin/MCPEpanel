@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.3.2'
+	VERSION='1.3.3'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -246,19 +246,19 @@
 		mono MiNET.Service.exe
 	}
 
-	function GOMINT(){
-		echo -en "${IBlue}Установка ядра ${IGreen}GoMint (1.8)${White}\n"
-		wget http://ci.gomint.io/job/GoMint/job/master/lastSuccessfulBuild/artifact/gomint-server/target/GoMint.jar
-		mv GoMint.jar gomint.jar
-		if [ -n "dpkg -l | grep java" ]
-		then
-			echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
-		else
-			echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
-   			apt install openjdk-11-jre-headless
-		fi
-		INSTALL_FINISH
-	}
+	#function GOMINT(){
+	#	echo -en "${IBlue}Установка ядра ${IGreen}GoMint (1.8)${White}\n"
+	#	wget http://ci.gomint.io/job/GoMint/job/master/lastSuccessfulBuild/artifact/gomint-server/target/GoMint.jar
+	#	mv GoMint.jar gomint.jar
+	#	if [ -n "dpkg -l | grep java" ]
+	#	then
+	#		echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
+	#	else
+	#		echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
+   	#		apt install openjdk-11-jre-headless
+	#	fi
+	#	INSTALL_FINISH
+	#}
 
 	function NUKKITX(){
 		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.8)${White}\n"
@@ -338,12 +338,13 @@
 	function CORE_CHOOSE(){
 		echo -en "\n${BIBlue}Выбор ядра\n\n"
 		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
-		echo -en "1. PocketMine-MP (PHP, MCPE 1.9)\n"
+		echo -en "1. PocketMine-MP (PHP, MCPE 1.10)\n"
 		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
 		#echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
-		echo -en "3. NukkitX (JAVA, MCPE 1.9)\n"
-		echo -en "${BRed}4. SteadFast2 (PHP, MCPE 1.1 - 1.9)\n${White}"
-		echo -en "5. GoMint (JAVA, MCPE 1.9)\n"
+		echo -en "3. NukkitX (JAVA, MCPE 1.10)\n"
+		echo -en "${BRed}4. SteadFast2 (PHP, MCPE 1.1 - 1.10)\n${White}"
+		#echo -en "5. GoMint (JAVA, MCPE 1.10)\n"
+		#echo -en "5. GoMine (GOLANG, MCPE 1.10)\n"
 		#Will be released in version 1.5.0
 		#echo -en "7. MiNET (C#,1.8)\n"
 		echo -en "> "
