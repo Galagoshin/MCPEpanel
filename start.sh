@@ -75,7 +75,7 @@
 
 	#Не смотрите код ниже. Это может навредить вам
 
-	VERSION='1.3.3'
+	VERSION='1.3.5'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -832,6 +832,41 @@
 		BACKUPS_CHECK
 	}
 
+	function PREPAIR_UPDATE(){
+		if [ -d "src" ]; then
+			rm -rf src
+		fi
+		if [ -f "PocketMine-MP.phar" ]; then
+			rm -rf PocketMine-MP.phar
+		fi
+		if [ -f "nukkit.jar" ]; then
+			rm -rf nukkit.jar
+		fi
+	}
+
+	function UPDATE_CORE_SELECT(){
+		read A
+		case ${A} in
+			"1" ) PREPAIR_UPDATE && POCKETMINE;;
+			"2" ) PREPAIR_UPDATE && GENISYSPRO;;
+			"3" ) PREPAIR_UPDATE && NUKKITX;;
+			"4" ) PREPAIR_UPDATE && STEADFAST2;;
+			"5" ) PREPAIR_UPDATE && GOMINT;;
+			*) NOT && UPDATE_CORE_SELECT;;
+		esac
+	}
+
+	function UPDATE_CORE_CHOOSE(){
+		echo -en "\n${BIBlue}Выбор ядра\n\n"
+		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
+		echo -en "1. PocketMine-MP (PHP, MCPE 1.10)\n"
+		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
+		echo -en "3. NukkitX (JAVA, MCPE 1.10)\n"
+		echo -en "${BRed}4. SteadFast2 (PHP, MCPE 1.1 - 1.10)\n${White}"
+		echo -en "> "
+		UPDATE_CORE_SELECT
+	}
+
 	function UPDATE(){
 		echo -en "${IBlue}Обновление панели...${White}\n"
 		sleep 1
@@ -848,10 +883,11 @@
 		case ${A} in
 			"1" ) START_SERVER_MENU;;
 			"2" ) INSTALLING_SERVER;;
-			"3" ) REMOVE_SERVER;;
-			"4" ) BACKUPS;;
-			"5" ) UPDATE;;
-			"6" ) EXIT;;
+			"3" ) UPDATE_CORE_CHOOSE;;
+			"4" ) REMOVE_SERVER;;
+			"5" ) BACKUPS;;
+			"6" ) UPDATE;;
+			"7" ) EXIT;;
 			*) NOT && START;;
 		esac
 	}
@@ -863,10 +899,11 @@
 		echo -en "${White}Пожалуйста, выберите действие. Напишите номер действия и нажмите ENTER\n"
 		echo -en "1. Запустить сервер\n"
 		echo -en "2. Установить сервер\n"
-		echo -en "3. Удалить сервер\n"
-		echo -en "4. Резервные копии\n"
-		echo -en "5. Обновить панель\n"
-		echo -en "6. Выйти из панели\n"
+		echo -en "3. Обновить сервер\n"
+		echo -en "4. Удалить сервер\n"
+		echo -en "5. Резервные копии\n"
+		echo -en "6. Обновить панель\n"
+		echo -en "7. Выйти из панели\n"
 		echo -en "> "
 		START
 	}
