@@ -274,19 +274,6 @@
 		INSTALL_FINISH
 	}
 
-	function NUKKIT(){
-		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.1)${White}\n"
-		wget https://magmacraft.ru/nukkit.jar
-		if [ -n "dpkg -l | grep java" ]
-		then
-			echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
-		else
-			echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
-   			apt install openjdk-11-jre-headless
-		fi
-		INSTALL_FINISH
-	}
-
 	function GENISYSPRO(){
 		echo -en "${IBlue}Установка ядра ${IGreen}Genisys${White}\n"
 		git clone https://github.com/GenisysPro/GenisysPro.git
