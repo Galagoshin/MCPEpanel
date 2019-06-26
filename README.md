@@ -10,7 +10,7 @@
 
 ## Поддержка ядер
 * PHP - PocketMine-MP, Genisys, SteadFast2
-* Java - Nukkit, NukkitX
+* Java - NukkitX
 #### В ближайшее время будет добавлена поддержка других ядер
 
 ## Установка
