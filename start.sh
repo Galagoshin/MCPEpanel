@@ -325,7 +325,7 @@
 	function CORE_CHOOSE(){
 		echo -en "\n${BIBlue}Выбор ядра\n\n"
 		echo -en "${White}Выберите ядро на котором будет стоять ваш сервер. Все ядра загружаются с официальных источников!\n"
-		echo -en "1. PocketMine-MP (PHP, MCPE 1.10)\n"
+		echo -en "1. PocketMine-MP (PHP, MCPE 1.12)\n"
 		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
 		#echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
 		echo -en "3. NukkitX (JAVA, MCPE 1.10)\n"
