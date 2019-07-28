@@ -261,7 +261,7 @@
 	#}
 
 	function NUKKITX(){
-		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.8)${White}\n"
+		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.12)${White}\n"
 		wget https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
 		mv nukkit-1.0-SNAPSHOT.jar nukkit.jar
 		if [ -n "dpkg -l | grep java" ]
