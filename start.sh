@@ -74,7 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	VERSION='2.0.0-ALPHA1'
+	VERSION='2.0.0-ALPHA2'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -509,6 +509,7 @@ function PREPAIR_INSTALL(){
 		fi
 	}
 
+#I have no idea how this works, but I won’t touch that
 	function RESTORE(){
 		read A
 		if [ -f ${A} ]; then
@@ -518,7 +519,7 @@ function PREPAIR_INSTALL(){
 			cd ${A}_run
 			tar -xvf ${A}
 			cd -
-			mv ${A}_run/${A} /root/.panel_backups
+			mv ${A}_run/${A} .panel_backups
 			rm -rf ${DIR}/*
 			mv ${A}_run/* $DIR
 			rm -rf ${A}_run
@@ -537,7 +538,7 @@ function PREPAIR_INSTALL(){
 		if [ -f ${A} ]; then
 			echo -en "${IBlue}Загружается резервная копия ${IGreen}${A}${White}\n"
 			cp ${A} $DIR
-			echo -en "\n${IGreen}Резервная копия успешно восстановлена!${White}\n"
+			echo -en "\n${IGreen}Резервная копия успешно загружена!${White}\n"
 			cd $DIR
 			BACKUPS
 		else
@@ -548,30 +549,27 @@ function PREPAIR_INSTALL(){
 	}
 
 	function COPY_BACKUP(){
-		cd /root/.panel_backups
 		echo -en "\n${BIBlue}Загрузка резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls
+		ls .panel_backups
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		COPY
 	}
 
 	function BACKUP(){
-		cd /root/.panel_backups
 		echo -en "\n${BIBlue}Восстановление резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls
+		ls .panel_backup
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		RESTORE
 	}
 
 	function DELETE_BACKUP(){
-		cd /root/.panel_backups
 		echo -en "\n${BIBlue}Удаление резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls
+		ls .panel_backups
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		DELETE
@@ -584,7 +582,7 @@ function PREPAIR_INSTALL(){
 		read A
 		echo -en "${IBlue}Создаётся резервная копия ${IGreen}${A}.tar.gz${White}\n"
 		tar -cf ${A}.tar.gz *
-		mv ${A}.tar.gz /root/.panel_backups/
+		mv ${A}.tar.gz .panel_backups/
 		echo -en "\n${IGreen}Резервная копия успешно создана!${White}\n"
 		BACKUPS
 	}
@@ -610,32 +608,18 @@ function PREPAIR_INSTALL(){
 		echo -en "4. Скачать резервную копию\n"
 		echo -en "5. Вернуться назад\n"
 		echo -en "> "
-		if [ -d "/root/.panel_backups" ]; then
-			true
+		if [ -d ".panel_backups" ]; then
+			BACKUPS_CHECK
 		else
-			mkdir /root/.panel_backups
-			if [ -d "/root/.panel_backups" ]; then
-				true
-			else
-				echo -en "\n${BIBlue}Резервные копии\n\n"
-				echo -en "${BIRed}Создание резервных копий невозможно!\n"
-				echo -en "${Red}Необходимо иметь права суперпользователя!\n"
-				MAIN_MENU
-			fi
+			mkdir .panel_backups
+  BACKUPS_CHECK
 		fi
-		BACKUPS_CHECK
 	}
 
 	function PREPAIR_UPDATE(){
-		if [ -d "src" ]; then
 			rm -rf src
-		fi
-		if [ -f "PocketMine-MP.phar" ]; then
 			rm -rf PocketMine-MP.phar
-		fi
-		if [ -f "nukkit.jar" ]; then
 			rm -rf nukkit.jar
-		fi
 	}
 
 	function UPDATE_CORE_SELECT(){
@@ -663,7 +647,7 @@ function PREPAIR_INSTALL(){
 
 	function UPDATE(){
 		echo -en "${IBlue}Обновление панели...${White}\n"
-		sleep 1
+ #TODO: wget
 		apt-get install git
 		git clone https://github.com/Galagoshin/MCPEpanel.git
 		mv MCPEpanel/start.sh start.sh
@@ -680,8 +664,8 @@ function PREPAIR_INSTALL(){
 			"3" ) UPDATE_CORE_CHOOSE;;
 			"4" ) REMOVE_SERVER;;
 			"5" ) BACKUPS;;
-			"6" ) UPDATE;;
-			"7" ) EXIT;;
+			#"6" ) UPDATE;;
+			"6" ) EXIT;;
 			*) NOT && START;;
 		esac
 	}
@@ -696,8 +680,8 @@ function PREPAIR_INSTALL(){
 		echo -en "3. Обновить сервер\n"
 		echo -en "4. Удалить сервер\n"
 		echo -en "5. Резервные копии\n"
-		echo -en "6. Обновить панель\n"
-		echo -en "7. Выйти из панели\n"
+		#echo -en "6. Обновить панель\n"
+		echo -en "6. Выйти из панели\n"
 		echo -en "> "
 		START
 	}
