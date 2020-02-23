@@ -508,20 +508,14 @@ function PREPAIR_INSTALL(){
 			DELETE
 		fi
 	}
-
-#I have no idea how this works, but I won’t touch that
+	
 	function RESTORE(){
 		read A
 		if [ -f ${A} ]; then
 			echo -en "${IBlue}Восстанавливается резервная копия ${IGreen}${A}${White}\n"
 			mkdir ${A}_run
-			mv ${A} ${A}_run
-			cd ${A}_run
-			tar -xvf ${A}
-			cd -
-			mv ${A}_run/${A} .panel_backups
-			rm -rf ${DIR}/*
-			mv ${A}_run/* $DIR
+			tar -xvf ${A} ${A}_run
+			mv ${A}_run/* ${DIR}/*
 			rm -rf ${A}_run
 			echo -en "\n${IGreen}Резервная копия успешно восстановлена!${White}\n"
 			cd $DIR
@@ -537,7 +531,7 @@ function PREPAIR_INSTALL(){
 		read A
 		if [ -f ${A} ]; then
 			echo -en "${IBlue}Загружается резервная копия ${IGreen}${A}${White}\n"
-			cp ${A} $DIR
+			cp ${A} $DIR/${A}.tar.gz
 			echo -en "\n${IGreen}Резервная копия успешно загружена!${White}\n"
 			cd $DIR
 			BACKUPS
@@ -549,27 +543,30 @@ function PREPAIR_INSTALL(){
 	}
 
 	function COPY_BACKUP(){
+		cd .panel_backups
 		echo -en "\n${BIBlue}Загрузка резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls .panel_backups
+		ls
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		COPY
 	}
 
 	function BACKUP(){
+		cd .panel_backups
 		echo -en "\n${BIBlue}Восстановление резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls .panel_backup
+		ls
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		RESTORE
 	}
 
 	function DELETE_BACKUP(){
+		cd .panel_backups
 		echo -en "\n${BIBlue}Удаление резервной копии\n\n"
 		echo -en "${White}Ваши резервные копии\n"
-		ls .panel_backups
+		ls
 		echo -en "Введите название резервной копии\n"
 		echo -en "> "
 		DELETE
@@ -581,8 +578,8 @@ function PREPAIR_INSTALL(){
 		echo -en "> "
 		read A
 		echo -en "${IBlue}Создаётся резервная копия ${IGreen}${A}.tar.gz${White}\n"
-		tar -cf ${A}.tar.gz *
-		mv ${A}.tar.gz .panel_backups/
+		tar -cf ${A} *
+		mv ${A} .panel_backups/
 		echo -en "\n${IGreen}Резервная копия успешно создана!${White}\n"
 		BACKUPS
 	}
@@ -612,7 +609,7 @@ function PREPAIR_INSTALL(){
 			BACKUPS_CHECK
 		else
 			mkdir .panel_backups
-  BACKUPS_CHECK
+  			BACKUPS_CHECK
 		fi
 	}
 
