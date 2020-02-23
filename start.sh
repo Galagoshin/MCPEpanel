@@ -1,5 +1,6 @@
 #!/bin/bash
 
+ #tnx, teslex
 	# Сброс
 	Color_Off='\e[0m'       # Text Reset
 
@@ -73,9 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	#Не смотрите код ниже. Это может навредить вам
-
-	VERSION='1.3.5'
+	VERSION='2.0.0-ALPHA1'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -109,128 +108,50 @@
 		FINISH_SELECT
 	}
 
-	function PREPAIR_INSTALL(){
-		echo -en "\n${IBlue}Подготовка к установке сервера...${White}\n"
-		sleep 1
-		if [ -d "bin" ]; then
+	function DELETE_FILES(){
 			rm -rf bin
-		fi
-		if [ -d "src" ]; then
 			rm -rf src
-		fi
-		if [ -f "PocketMine-MP.phar" ]; then
 			rm -rf PocketMine-MP.phar
-		fi
-		if [ -f "nukkit.jar" ]; then
 			rm -rf nukkit.jar
-		fi
-		if [ -f "pocketmine.yml" ]; then
 			rm -rf pocketmine.yml
-		fi
-		if [ -f "white-list.txt" ]; then
 			rm -rf white-list.txt
-		fi
-		if [ -d "vendor" ]; then
 			rm -rf vendor
-		fi
-		if [ -d "logs" ]; then
 			rm -rf logs
-		fi
-		if [ -d "worlds" ]; then
 			rm -rf worlds
-		fi
-		if [ -f "ops.txt" ]; then
 			rm -rf ops.txt
-		fi
-		if [ -f "ops.json" ]; then
 			rm -rf ops.json
-		fi
-		if [ -f "banned-ips.txt" ]; then
 			rm -rf banned-ips.txt
-		fi
-		if [ -f "banned-ips.json" ]; then
 			rm -rf banned-ips.json
-		fi
-		if [ -f "banned-players.txt" ]; then
 			rm -rf banned-players.txt
-		fi
-		if [ -f "banned-players.json" ]; then
 			rm -rf banned-players.json
-		fi
-		if [ -d "plugins" ]; then
 			rm -rf plugins
-		fi
-		if [ -f "server.log" ]; then
 			rm -rf server.log
-		fi
-		if [ -d "resource_packs" ]; then
 			rm -rf resource_packs
-		fi
-		if [ -d "players" ]; then
 			rm -rf players
-		fi
-		if [ -f "server.properties" ]; then
 			rm -rf server.properties
-		fi
-		if [ -f "banned-cids.json" ]; then
 			rm -rf banned-cids.json
-		fi
-		if [ -f "banned-cids.txt" ]; then
 			rm -rf banned-cids.txt
-		fi
-		if [ -f "genisys.yml" ]; then
 			rm -rf genisys.yml
-		fi
-		if [ -f "altay.yml" ]; then
-			rm -rf altay.yml
-		fi
-		if [ -d "crashdumps" ]; then
 			rm -rf crashdumps
-		fi
-		if [ -d "plugin_data" ]; then
 			rm -rf plugin_data
-		fi
-		if [ -f "nukkit.yml" ]; then
 			rm -rf genisys.yml
-		fi
-		if [ -f "pocketmine-soft.yml" ]; then
-			rm -rf genisys.yml
-		fi
-		if [ -f "recipes.json" ]; then
 			rm -rf recipes.json
-		fi
-		if [ -f "nukkit.yml" ]; then
 			rm -rf nukkit.yml
-		fi
-		if [ -f "creativeitems.json" ]; then
 			rm -rf creativeitems.json
-		fi
-		if [ -f "pocketmine-soft.yml" ]; then
 			rm -rf pocketmine-soft.yml
-		fi
-		if [ -f "installer.sh" ]; then
 			rm -rf installer.sh
-		fi
-		if [ -f "LICENSE" ]; then
 			rm -rf LICENSE
-		fi
-		if [ -f "README.md" ]; then
 			rm -rf README.md
-		fi
-		if [ -f "gomint.jar" ]; then
 			rm -rf gomint.jar
-		fi
-		if [ -f "server.yml" ]; then
 			rm -rf server.yml
-		fi
-		if [ -d "world" ]; then
 			rm -rf world
-		fi
-		apt-get install git
-		apt-get install screen
 	}
 
-	#Yes, I tried, but nothing happened
+function PREPAIR_INSTALL(){
+  		echo -en "\n${IBlue}Подготовка к установке сервера...${White}\n"
+   DELETE_FILES
+}
+
 	function MINET(){
 		echo -en "${IBlue}Установка ядра ${IGreen}MiNET${White}\n"
 		git clone https://github.com/NiclasOlofsson/MiNET.git
@@ -550,121 +471,7 @@
 
 	function DELETE_SERVER(){
 		echo -en "\n${IBlue}Удаление сервера...${White}\n"
-		sleep 1
-		if [ -d "bin" ]; then
-			rm -rf bin
-		fi
-		if [ -d "src" ]; then
-			rm -rf src
-		fi
-		if [ -f "PocketMine-MP.phar" ]; then
-			rm -rf PocketMine-MP.phar
-		fi
-		if [ -f "nukkit.jar" ]; then
-			rm -rf nukkit.jar
-		fi
-		if [ -f "pocketmine.yml" ]; then
-			rm -rf pocketmine.yml
-		fi
-		if [ -f "white-list.txt" ]; then
-			rm -rf white-list.txt
-		fi
-		if [ -d "vendor" ]; then
-			rm -rf vendor
-		fi
-		if [ -d "logs" ]; then
-			rm -rf logs
-		fi
-		if [ -d "worlds" ]; then
-			rm -rf worlds
-		fi
-		if [ -f "ops.txt" ]; then
-			rm -rf ops.txt
-		fi
-		if [ -f "ops.json" ]; then
-			rm -rf ops.json
-		fi
-		if [ -f "banned-ips.txt" ]; then
-			rm -rf banned-ips.txt
-		fi
-		if [ -f "banned-ips.json" ]; then
-			rm -rf banned-ips.json
-		fi
-		if [ -f "banned-players.txt" ]; then
-			rm -rf banned-players.txt
-		fi
-		if [ -f "banned-players.json" ]; then
-			rm -rf banned-players.json
-		fi
-		if [ -d "plugins" ]; then
-			rm -rf plugins
-		fi
-		if [ -f "server.log" ]; then
-			rm -rf server.log
-		fi
-		if [ -d "resource_packs" ]; then
-			rm -rf resource_packs
-		fi
-		if [ -d "players" ]; then
-			rm -rf players
-		fi
-		if [ -f "server.properties" ]; then
-			rm -rf server.properties
-		fi
-		if [ -f "banned-cids.json" ]; then
-			rm -rf banned-cids.json
-		fi
-		if [ -f "banned-cids.txt" ]; then
-			rm -rf banned-cids.txt
-		fi
-		if [ -f "genisys.yml" ]; then
-			rm -rf genisys.yml
-		fi
-		if [ -f "altay.yml" ]; then
-			rm -rf altay.yml
-		fi
-		if [ -d "crashdumps" ]; then
-			rm -rf crashdumps
-		fi
-		if [ -f "nukkit.yml" ]; then
-			rm -rf genisys.yml
-		fi
-		if [ -f "pocketmine-soft.yml" ]; then
-			rm -rf genisys.yml
-		fi
-		if [ -f "recipes.json" ]; then
-			rm -rf recipes.json
-		fi
-		if [ -f "nukkit.yml" ]; then
-			rm -rf nukkit.yml
-		fi
-		if [ -f "creativeitems.json" ]; then
-			rm -rf creativeitems.json
-		fi
-		if [ -d "plugin_data" ]; then
-			rm -rf plugin_data
-		fi
-		if [ -f "pocketmine-soft.yml" ]; then
-			rm -rf pocketmine-soft.yml
-		fi
-		if [ -f "installer.sh" ]; then
-			rm -rf installer.sh
-		fi
-		if [ -f "LICENSE" ]; then
-			rm -rf LICENSE
-		fi
-		if [ -f "README.md" ]; then
-			rm -rf README.md
-		fi
-		if [ -f "gomint.jar" ]; then
-			rm -rf gomint.jar
-		fi
-		if [ -f "server.yml" ]; then
-			rm -rf server.yml
-		fi
-		if [ -d "world" ]; then
-			rm -rf world
-		fi
+		DELETE_FILES
 		echo -en "\n${IGreen}Сервер успешно удалён!${White}\n"
 		MAIN_MENU
 	}
