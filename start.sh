@@ -74,7 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	VERSION='2.0.0-ALPHA2'
+	VERSION='2.0.0-BETA1'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -251,7 +251,7 @@
 	
 	function INSTALLING_SERVER(){
 		echo -en "\n${BIBlue}Установка сервера\n\n"
-		echo -en "${White}Сервер будет установлен в директорию в находится эта панель. Если в этой дериктории уже есть сервер, то он будет удалён! Вы согласны?\n"
+		echo -en "${White}Сервер будет установлен в директорию, в которой находится эта панель. Если в этой дериктории уже есть сервер, то он будет удалён! Вы согласны?\n"
 		echo -en "1. Да\n"
 		echo -en "2. Нет\n"
 		echo -en "> "
@@ -306,51 +306,35 @@
 					CHECKING_INSTALL
 				fi
 			fi
-		elif [ -n "dpkg -l | grep java" ]; then
-			if [ -f "nukkit.jar" ]; then
+		elif [ -f "nukkit.jar" ]; then
+			if [ -n "dpkg -l | grep java" ]; then
 				echo -en "\n${BIBlue}Включение сервера\n\n"
-				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить серверу (В ГБ)\n"
 				echo -en "> "
 				read G
 				java -jar -Xmx${G}G nukkit.jar
 				echo -en "${IYellow}Сервер был выключен.\n"
 				MAIN_MENU
-			elif [ -f "gomint.jar" ]; then
-				echo -en "\n${BIBlue}Включение сервера\n\n"
-				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
-				echo -en "> "
-				read G
-				java -jar -Xmx${G}G gomint.jar
-				echo -en "${IYellow}Сервер был выключен.\n"
-				MAIN_MENU
 			else
-				echo -en "\n${BIRed}Не найдено работающее ядро JAVA!\n"
+				echo -en "\n${BIRed}Не найдена работающая JAVA!\n"
 				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IYellow}Возможно, сервер был неправильно установлен.\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
+				echo -en "Установите её, перед тем как запустить ваш сервер!\nДля ${IGreen}Debian, Ubuntu ${IYellow}apt install openjdk-11-jre-headless"
 				CHECKING_INSTALL
 			fi
 		else
-			if [ -f "nukkit.jar" ]; then
-				echo -en "\n${BIRed}Не найдена работающая библеотека JAVA!\n"
-				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IYellow}Возможно, сервер был неправильно установлен.\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
-				CHECKING_INSTALL
-			else
-				echo -en "\n${BIRed}В этой директории не установлен сервер!\n"
-				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
-				CHECKING_INSTALL
-			fi
+			echo -en "\n${BIRed}В этой директории не установлен сервер!\n"
+			echo -en "${BIRed}Запуск сервера невозможен!\n"
+			echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
+			CHECKING_INSTALL
 		fi
 	}
-
+	
 	function START_SERVER_LOOP(){
 		if [ -f "bin/php7/bin/php" ]; then
 			if [ -f "src/pocketmine/PocketMine.php" ]; then
 				while true
 				do
+					trap START_SERVER_MENU 2
 					bin/php7/bin/php src/pocketmine/PocketMine.php
 					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
 					sleep 5
@@ -358,6 +342,7 @@
 			elif [ -f "PocketMine-MP.phar" ]; then
 				while true
 				do
+					trap START_SERVER_MENU 2
 					bin/php7/bin/php PocketMine-MP.phar
 					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
 					sleep 5
@@ -382,10 +367,10 @@
 					CHECKING_INSTALL
 				fi
 			fi
-		elif [ -n "dpkg -l | grep java" ]; then
-			if [ -f "nukkit.jar" ]; then
+		elif [ -f "nukkit.jar" ]; then
+			if [ -n "dpkg -l | grep java" ]; then
 				echo -en "\n${BIBlue}Включение сервера\n\n"
-				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
+				echo -en "${White}Введите объём памяти, который хотите выделить серверу (В ГБ)\n"
 				echo -en "> "
 				read G
 				while true
@@ -395,38 +380,17 @@
 					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
 					sleep 5
 				done
-			elif [ -f "gomint.jar" ]; then
-				echo -en "\n${BIBlue}Включение сервера\n\n"
-				echo -en "${White}Введите объём памяти, который хотите выделить сервере (В ГБ)\n"
-				echo -en "> "
-				read G
-				while true
-				do
-					trap START_SERVER_MENU 2
-					java -jar -Xmx${G}G gomint.jar
-					echo -en "${IGreen}Сервер перезапустится через 5 секунд. Чтобы отменить перезапуск нажми${BIYellow} CTRL + C${Color_Off}"
-					sleep 5
-				done
 			else
-				echo -en "\n${BIRed}Не найдено работающее ядро JAVA!\n"
+				echo -en "\n${BIRed}Не найдена работающая JAVA!\n"
 				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IYellow}Возможно, сервер был неправильно установлен.\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
+				echo -en "Установите её, перед тем как запустить ваш сервер!\nДля ${IGreen}Debian, Ubuntu ${IYellow}apt install openjdk-11-jre-headless"
 				CHECKING_INSTALL
 			fi
 		else
-			if [ -f "nukkit.jar" ]; then
-				echo -en "\n${BIRed}Не найдена работающая библеотека JAVA!\n"
-				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IYellow}Возможно, сервер был неправильно установлен.\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
-				CHECKING_INSTALL
-			else
-				echo -en "\n${BIRed}В этой директории не установлен сервер!\n"
-				echo -en "${BIRed}Запуск сервера невозможен!\n"
-				echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
-				CHECKING_INSTALL
-			fi
+			echo -en "\n${BIRed}В этой директории не установлен сервер!\n"
+			echo -en "${BIRed}Запуск сервера невозможен!\n"
+			echo -en "${IGreen}Воспользуйтесь установщиком из нашей панели!\n"
+			CHECKING_INSTALL
 		fi
 	}
 
