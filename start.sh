@@ -147,10 +147,10 @@
 			rm -rf world
 	}
 
-function PREPAIR_INSTALL(){
+	function PREPAIR_INSTALL(){
   		echo -en "\n${IBlue}Подготовка к установке сервера...${White}\n"
-   DELETE_FILES
-}
+   		DELETE_FILES
+	}
 
 	function MINET(){
 		echo -en "${IBlue}Установка ядра ${IGreen}MiNET${White}\n"
@@ -166,20 +166,6 @@ function PREPAIR_INSTALL(){
 		cd src/MiNET/MiNET.Service/bin/Linux
 		mono MiNET.Service.exe
 	}
-
-	#function GOMINT(){
-	#	echo -en "${IBlue}Установка ядра ${IGreen}GoMint (1.8)${White}\n"
-	#	wget http://ci.gomint.io/job/GoMint/job/master/lastSuccessfulBuild/artifact/gomint-server/target/GoMint.jar
-	#	mv GoMint.jar gomint.jar
-	#	if [ -n "dpkg -l | grep java" ]
-	#	then
-	#		echo -en "${IGreen}Java 11 ${IBlue}уже установлена!${White}\n"
-	#	else
-	#		echo -en "${IBlue}Установка библеотек ${IGreen}Java 11${White}\n"
-   	#		apt install openjdk-11-jre-headless
-	#	fi
-	#	INSTALL_FINISH
-	#}
 
 	function NUKKITX(){
 		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.12)${White}\n"
@@ -218,8 +204,6 @@ function PREPAIR_INSTALL(){
 	}
 
 	function STEADFAST2(){
-		echo -en "${BRed}Предупреждение! Из-за своеобразного кода этого ядра в панеле могут возникать баги! Скоро эта проблема будет пофикшена\n"
-		sleep 5
 		echo -en "${IBlue}Установка ядра ${IGreen}SteadFast2${White}\n"
 		git clone https://github.com/Hydreon/Steadfast2.git
 		mv Steadfast2/* $DIR
@@ -238,7 +222,6 @@ function PREPAIR_INSTALL(){
 			"2" ) PREPAIR_INSTALL && GENISYSPRO;;
 			"3" ) PREPAIR_INSTALL && NUKKITX;;
 			"4" ) PREPAIR_INSTALL && STEADFAST2;;
-			"5" ) PREPAIR_INSTALL && GOMINT;;
 			*) NOT && CORE_SELECT;;
 		esac
 	}
@@ -250,11 +233,8 @@ function PREPAIR_INSTALL(){
 		echo -en "2. GenisysPro (PHP, MCPE 1.1)\n"
 		#echo -en "3. NukkitX (JAVA, MCPE 1.1)\n"
 		echo -en "3. NukkitX (JAVA, MCPE 1.10)\n"
-		echo -en "${BRed}4. SteadFast2 (PHP, MCPE 1.1 - 1.10)\n${White}"
-		#echo -en "5. GoMint (JAVA, MCPE 1.10)\n"
-		#echo -en "5. GoMine (GOLANG, MCPE 1.10)\n"
-		#Will be released in version 1.5.0
-		#echo -en "7. MiNET (C#,1.8)\n"
+		echo -en "4. SteadFast2 (PHP, MCPE 1.1 - 1.10)\n${White}"
+		#echo -en "5. MiNET (C#,1.8)\n"
 		echo -en "> "
 		CORE_SELECT
 	}
