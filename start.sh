@@ -588,12 +588,18 @@
 
 	function UPDATE(){
 		echo -en "${IBlue}Обновление панели...${White}\n"
- 		#TODO: wget
-		apt-get install git
-		git clone https://github.com/Galagoshin/MCPEpanel.git
-		mv MCPEpanel/start.sh start.sh
-		rm -rf MCPEpanel
-		echo -en "\n${IGreen}Панель успешно обновлена!${White}\n"
+		I="https://github.com/Galagoshin/MCPEpanel/releases/download/${VERSION}/start.sh"
+		
+		if [[ `curl --head --silent --fail $I 2> /dev/null | grep '302'` ]];
+		then 
+			echo -en "\n${IGreen}Обновлений не найдено.${White}\n"
+			MAIN_MENU
+		else
+			git clone https://github.com/Galagoshin/MCPEpanel.git
+			mv MCPEpanel/start.sh start.sh
+			rm -rf MCPEpanel
+			echo -en "\n${IGreen}Панель успешно обновлена!${White}\n"
+		fi
 		MAIN_MENU
 	}
 
@@ -605,8 +611,8 @@
 			"3" ) UPDATE_CORE_CHOOSE;;
 			"4" ) REMOVE_SERVER;;
 			"5" ) BACKUPS;;
-			#"6" ) UPDATE;;
-			"6" ) EXIT;;
+			"6" ) UPDATE;;
+			"7" ) EXIT;;
 			*) NOT && START;;
 		esac
 	}
@@ -621,8 +627,14 @@
 		echo -en "3. Обновить сервер\n"
 		echo -en "4. Удалить сервер\n"
 		echo -en "5. Резервные копии\n"
-		#echo -en "6. Обновить панель\n"
-		echo -en "6. Выйти из панели\n"
+		I="https://github.com/Galagoshin/MCPEpanel/releases/download/${VERSION}/start.sh"
+		if [[ `curl --head --silent --fail $I 2> /dev/null | grep '302'` ]];
+		then 
+			echo -en "6. Обновить панель\n"
+		else
+			echo -en "6. ${IGreen}Обновить панель${White}\n"
+		fi
+		echo -en "7. Выйти из панели\n"
 		echo -en "> "
 		START
 	}
