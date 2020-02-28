@@ -74,7 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	VERSION='2.0.0-BETA1'
+	VERSION='2.0.0-BETA2'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -170,7 +170,7 @@
 
 	function NUKKITX(){
 		echo -en "${IBlue}Установка ядра ${IGreen}NukkitX (1.12)${White}\n"
-		wget -O nukkit.jar https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
+		wget -O nukkit.jar --no-check-certificate https://ci.nukkitx.com/job/NukkitX/job/Nukkit/job/master/lastSuccessfulBuild/artifact/target/nukkit-1.0-SNAPSHOT.jar
 		if [ -z "dpkg -l | grep java" ]
 		then
 			echo -en "${IRed}Для работы этого ядра необходима ${IGreen}Java ${IWhite}. Установите её, перед тем как запустить ваш сервер!\nДля ${IGreen}Debian, Ubuntu ${IYellow}apt install openjdk-11-jre-headless"
@@ -181,13 +181,13 @@
 
 	function GENISYSPRO(){
 		echo -en "${IBlue}Установка ядра ${IGreen}Genisys${White}\n"
-		wget https://github.com/GenisysPro/GenisysPro/archive/master.zip
+		wget --no-check-certificate https://github.com/GenisysPro/GenisysPro/archive/master.zip
 		unzip master.zip
 		rm -rf master.zip
 		mv GenisysPro-master/src $DIR
 		rm -rf GenisysPro-master
 		echo -en "${IBlue}Установка ${IGreen}PHP 7.3${White}\n"
-		wget https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
+		wget --no-check-certificate https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
 		tar -xvf PHP_Linux-x86_64.tar.gz
 		rm -rf PHP_Linux-x86_64.tar.gz
 		INSTALL_FINISH
@@ -195,9 +195,9 @@
 
 	function POCKETMINE(){
 		echo -en "${IBlue}Установка ядра ${IGreen}PocketMine-MP${White}\n"
-		wget https://jenkins.pmmp.io/job/PocketMine-MP/lastSuccessfulBuild/artifact/PocketMine-MP.phar
+		wget --no-check-certificate https://jenkins.pmmp.io/job/PocketMine-MP/lastSuccessfulBuild/artifact/PocketMine-MP.phar
 		echo -en "${IBlue}Установка ${IGreen}PHP 7.3${White}\n"
-		wget https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
+		wget --no-check-certificate https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
 		tar -xvf PHP_Linux-x86_64.tar.gz
 		rm -rf PHP_Linux-x86_64.tar.gz
 		INSTALL_FINISH
@@ -205,13 +205,13 @@
 
 	function STEADFAST2(){
 		echo -en "${IBlue}Установка ядра ${IGreen}SteadFast2${White}\n"
-		wget https://github.com/Hydreon/Steadfast2/archive/master.zip
+		wget --no-check-certificate https://github.com/Hydreon/Steadfast2/archive/master.zip
 		unzip master.zip
 		rm -rf master.zip
 		mv Steadfast2-master/src $DIR/src
 		rm -rf Steadfast2-master
 		echo -en "${IBlue}Установка ${IGreen}PHP 7.3${White}\n"
-		wget https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
+		wget --no-check-certificate https://jenkins.pmmp.io/job/PHP-7.3-Linux-x86_64/lastSuccessfulBuild/artifact/PHP_Linux-x86_64.tar.gz
 		tar -xvf PHP_Linux-x86_64.tar.gz
 		rm -rf PHP_Linux-x86_64.tar.gz
 		INSTALL_FINISH
