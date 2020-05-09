@@ -74,7 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	VERSION='2.0.0-BETA3'
+	VERSION='2.0.0-BETA4'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -529,6 +529,29 @@
 		BACKUPS
 	}
 
+    function AUTO_BACKUP(){
+        TIME=$(date +"%m-%d-%y-%H-%M-%S")
+		tar -cf "${TIME}" *
+		mv "${TIME}" .panel_backups/
+	}
+
+    function CRON_BACKUP(){
+        echo -en "\n${BIBlue}Авто-бэкап\n\n"
+        if [[ $EUID -ne 0 ]]; then
+            echo -en "${White}Для доступа к файлу ${Green}crontab${White} необходимы права суперпользователя. Введите пароль от root и запустите скрипт заного.\n"
+            su root
+            echo -en "${White}Вы вышли из режима суперпользователя.\n"
+            MAIN_MENU
+        else
+            echo -en "${White}Укажите время в часах\n"
+		    echo -en "> "
+            read A
+            echo "* ${A} * * * root ${DIR}/start.sh -backup" >> /etc/crontab
+            echo -en "${White}Вы задали авто-бэкап. Если вы запускали скрипт не от пользователя root, пропишите ${Red}exit${White}, чтобы выйти из режима суперпользователя.\n"
+            reboot
+        fi
+    }
+
 	function BACKUPS_CHECK(){
 		read A
 		case ${A} in
@@ -536,7 +559,8 @@
 			"2" ) DELETE_BACKUP;;
 			"3" ) BACKUP;;
 			"4" ) COPY_BACKUP;;
-			"5" ) MAIN_MENU;;
+            "5" ) CRON_BACKUP;;
+			"6" ) MAIN_MENU;;
 			*) NOT && BACKUPS_CHECK;;
 		esac
 	}
@@ -548,7 +572,8 @@
 		echo -en "2. Удалить резервную копию\n"
 		echo -en "3. Восстановить резервную копию\n"
 		echo -en "4. Скачать резервную копию\n"
-		echo -en "5. Вернуться назад\n"
+        echo -en "5. Задать автобэкап\n"
+		echo -en "6. Вернуться назад\n"
 		echo -en "> "
 		if [ -d ".panel_backups" ]; then
 			BACKUPS_CHECK
@@ -619,8 +644,12 @@
 
 
 	function MAIN_MENU(){
-		echo -en "\n${BIBlue}Главное меню\n"
-		echo -en "\n"
+        if [[ $EUID -ne 0 ]]; then
+            echo -en "\n${BIBlue}Главное меню"
+        else
+            echo -en "\n${BIBlue}Главное меню${BIRed} ROOT"  
+        fi
+		echo -en "\n\n"
 		echo -en "${White}Пожалуйста, выберите действие. Напишите номер действия и нажмите ENTER\n"
 		echo -en "1. Запустить сервер\n"
 		echo -en "2. Установить сервер\n"
@@ -641,8 +670,12 @@
 
 	cd "$DIR"
 
-	echo -en "\n\n"
-	echo -en "${BIGreen}MCPEpanel ${IWhite}${VERSION}\n"
-	echo -en "${BIBlue}github: ${IYellow}github.com/Galagoshin/MCPEpanel\n"
-	echo -en "${BIRed}link: ${IYellow}vk.com/galagoshin\n\n"
-	MAIN_MENU
+    if test $1 = "-backup"; then
+        AUTO_BACKUP
+    else
+	    echo -en "\n\n"
+	    echo -en "${BIGreen}MCPEpanel ${IWhite}${VERSION}\n"
+	    echo -en "${BIBlue}github: ${IYellow}github.com/Galagoshin/MCPEpanel\n"
+	    echo -en "${BIRed}link: ${IYellow}vk.com/galagoshin\n\n"
+	    MAIN_MENU
+    fi
