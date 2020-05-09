@@ -74,7 +74,7 @@
 	On_ICyan='\e[0;106m'    # Cyan
 	On_IWhite='\e[0;107m'   # White
 
-	VERSION='2.0.0-BETA2'
+	VERSION='2.0.0-BETA3'
 	DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 	function NEXT(){
@@ -458,10 +458,10 @@
 		read A
 		if [ -f ${A} ]; then
 			echo -en "${IBlue}Восстанавливается резервная копия ${IGreen}${A}${White}\n"
-			mkdir ${A}_run
-			tar -xvf ${A} ${A}_run
-			mv ${A}_run/* ${DIR}/*
-			rm -rf ${A}_run
+			mkdir run
+			tar xfv ${A} -C run
+			mv run/* ${DIR}
+			rm -rf run
 			echo -en "\n${IGreen}Резервная копия успешно восстановлена!${White}\n"
 			cd $DIR
 			BACKUPS
@@ -522,7 +522,7 @@
 		echo -en "${White}Введите название резервной копии\n"
 		echo -en "> "
 		read A
-		echo -en "${IBlue}Создаётся резервная копия ${IGreen}${A}.tar.gz${White}\n"
+		echo -en "${IBlue}Создаётся резервная копия ${IGreen}${A}${White}\n"
 		tar -cf ${A} *
 		mv ${A} .panel_backups/
 		echo -en "\n${IGreen}Резервная копия успешно создана!${White}\n"
